@@ -20,7 +20,7 @@ class App extends Component {
           this.setState({tasks: this.state.tasks.filter(task => task.id !== id)});
       });
   }
-  
+
   editTask(task){
     task.completed = task.completed === true ? false: true
       TaskService.updateTask(task, task.id).then(res => {
@@ -55,42 +55,37 @@ class App extends Component {
 
   render() {
       return (
-          <div>
-               <h2 className="text-center">Tasks List</h2>
-               <div className = "row">
+          <div className='container'>
+               <h2 className="text-center">Tasker</h2>
                 <form>
-                  <input type="text" name="Id"  value={this.state.newTask}  onChange={this.changeHandler} ></input>
-                  <button className="btn btn-primary" onClick={this.addTask}>Add Task</button>
-                </form>
-               </div>
+                  <div className="input-group mb-3">
+                    <input type="text" className="form-control" placeholder="Task's Name" aria-label="Recipient's username" aria-describedby="button-addon2" value={this.state.newTask}  onChange={this.changeHandler}/>
+                    <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={this.addTask}>Add Task</button>
+                  </div>
+              </form>
                <br></br>
-               <div className = "row">
-                      <table className = "table table-striped table-bordered">
-                          <thead>
-                              <tr>
-                                  <th> Task Name</th>
-                                  <th> Task Updated At</th>
-                                  <th> Actions</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              {
-                                  this.state.tasks.map(
-                                      task => 
-                                      <tr key = {task.id}>
-                                           <td> { task.name} </td>   
-                              
-                                           <td> {task.updatedAt}</td>
-                                           <td>
-                                               <button onClick={ () => this.editTask(task)} className="btn btn-info">{task.completed === true? "Mark as Completed":"Mark as Incomplete"} </button>
-                                               <button style={{marginLeft: "10px"}} onClick={ () => this.deleteTask(task.id)} className="btn btn-danger">Delete </button>
-                                           </td>
-                                      </tr>
-                                  )
-                              }
-                          </tbody>
-                      </table>
-               </div>
+               <div>
+                <div className="list-group">
+                    {
+                    this.state.tasks.map(
+                        task => 
+                        <div className='card'>
+                            <div className='card-body'>
+                              <div className='row'> 
+                                <div className='col-11'>
+                                  <h5 className="card-title">    { task.name}</h5>
+                                  <h6 className='card-subtitle text-muted'>{new Date(task.updatedAt).toISOString().split('T')[0]}</h6>
+                                </div>
+                                <div className='col-1'>
+                                    <input type="checkbox" defaultChecked={task.completed} onClick={ () => this.editTask(task)} />
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                    )
+                }
+                </div>
+              </div>
           </div>
       )
   }
